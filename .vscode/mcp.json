@@ -1,0 +1,16 @@
+{
+  "servers": {
+    "angular": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "--no-install",
+        "ng",
+        "mcp",
+        "--root",
+        "${workspaceFolder}"
+      ],
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}
