@@ -5,6 +5,8 @@
         "git fetch": true,
         "git pull": true,
         "git push": true,
+        "git add": true,
+        "git commit": true,
         "gh pr list": true,
         "gh pr view": true,
         "gh pr create": true,
