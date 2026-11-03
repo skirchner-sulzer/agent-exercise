@@ -13,13 +13,19 @@
 - Niemals direkt auf `main` arbeiten. Für jede Änderung einen passenden Branch verwenden, zum Beispiel `feature/...`, `fix/...`, `release/...` oder `docs/...`, und die Änderung über einen Pull Request zum Remote-Repository einreichen.
 - Entdeckte, nicht zur aktuellen Änderung gehörende Fehler nicht nebenbei beheben und dafür kein Issue erstellen. Ihre Behebung erfolgt getrennt in einem eigenen Commit.
 
+## Dokumentation und Projektgedächtnis
+
+- Projektbezogene Dokumentation wird unter `docs/` abgelegt. Die Root-README bleibt der Einstieg für Setup und Standardbefehle; Details gehören in `docs/`.
+- Dauerhafte, repositorybezogene Memory-Notizen liegen thematisch gegliedert unter `docs/memory/`, zum Beispiel in Dateien wie `architecture.md`, `testing.md` oder `tooling.md`. Die Struktur und Pflege sind in [docs/README.md](docs/README.md) beschrieben.
+- Lies vor passenden Änderungen die relevanten Dokumentations- und Memory-Dateien. Halte nach der Verifikation neue, dauerhaft nützliche und überprüfte Erkenntnisse dort fest. Keine unbestätigten Annahmen, flüchtigen Sitzungsnotizen, Zugangsdaten oder benutzerweiten Informationen speichern.
+
 ## Vorgehen bei Änderungen
 
 1. Anforderungen und erwartetes Verhalten konkretisieren und mit passenden Tests beschreiben, bevor die Implementierung beginnt.
 2. Die Implementierung erstellen und dabei die Anforderungen und den bestehenden Projektstil einhalten.
 3. Die Implementierung gegen jede Anforderung verifizieren und die relevanten Tests ausführen.
 4. Rand- und Fehlerfälle untersuchen, fehlende Tests ergänzen und die betroffenen Prüfungen erneut ausführen.
-5. Abschließend die deutsche Dokumentation aktualisieren oder ergänzen.
+5. Abschließend die deutsche Dokumentation unter `docs/` aktualisieren oder ergänzen und bei Bedarf die passende thematische Memory-Notiz erneuern.
 
 Wenn eine Änderung nicht sinnvoll automatisiert testbar ist, die passende manuelle Verifikation benennen und durchführen.
 
