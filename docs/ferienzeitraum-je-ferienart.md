@@ -2,19 +2,19 @@
 
 ## Kontext
 
-Die Gruppierungsüberschrift für Ferienobjekte zeigt derzeit eine Anzahl von Wochen. Statt dieser Wochenzahl soll die Gesamtspanne der Ferienobjekte in der Gruppe erscheinen. Die Spanne wird direkt unter der Ferienart-Überschrift in kleinerer Schrift dargestellt.
+Die Gruppierungsüberschrift für Ferienobjekte zeigt derzeit eine Anzahl von Wochen. Statt dieser Wochenzahl soll die Gesamtspanne der Ferienobjekte in der Gruppe erscheinen. Ferienart-Bezeichnung und Spanne stehen in derselben Zeile: Die Bezeichnung steht links, die Spanne rechts. Farbpunkt, Bezeichnung und Spanne sind vertikal ausgerichtet; die Spanne ist kleiner gesetzt als die Überschrift.
 
 ## Ziele
 
 - Die Wochenzahl in der Gruppierungsüberschrift durch die Gesamtspanne der Gruppe ersetzen.
-- Den Zeitraum gut auffindbar direkt unter der Ferienart-Überschrift darstellen.
+- Den Zeitraum gut auffindbar rechts neben der Ferienart-Überschrift in derselben Zeile darstellen.
 - Die Spanne für Zeiträume innerhalb eines Jahres und über einen Jahreswechsel eindeutig formatieren.
 
 ## Umfang
 
 Für jede Gruppe wird die Gesamtspanne vom frühesten `startDate` bis zum spätesten `endDate` aller Ferienobjekte der Gruppe angezeigt. Die Gesamtspanne umfasst auch Lücken zwischen einzelnen Ferienobjekten.
 
-Die Spanne steht direkt unter der Ferienart-Überschrift und ist kleiner gesetzt als diese. Die bisherige Wochenzahl wird entfernt beziehungsweise ersetzt. Es wird keine Wochenzahl zusätzlich angezeigt.
+Die Spanne steht rechts neben der Ferienart-Überschrift in derselben Zeile und ist kleiner gesetzt als diese. Farbpunkt, Bezeichnung und Spanne sind vertikal ausgerichtet. Die bisherige Wochenzahl wird entfernt beziehungsweise ersetzt. Es wird keine Wochenzahl zusätzlich angezeigt.
 
 Die Datumsdarstellung folgt diesen Beispielen:
 
@@ -41,7 +41,8 @@ Die Datumsdarstellung folgt diesen Beispielen:
 - Die Gruppierungsüberschrift zeigt anstelle der Wochenzahl die Gesamtspanne der Gruppe.
 - Die angezeigte Spanne entspricht dem frühesten `startDate` bis zum spätesten `endDate` aller Ferienobjekte der Gruppe.
 - Lücken zwischen den Ferienobjekten liegen innerhalb der angezeigten Gesamtspanne.
-- Die Spanne steht unmittelbar unter der Ferienart-Überschrift und ist kleiner gesetzt als diese.
+- Farbpunkt, Ferienart-Bezeichnung und Spanne stehen in derselben Zeile und sind vertikal ausgerichtet.
+- Die Ferienart-Bezeichnung steht links, die Spanne rechts; die Spanne ist kleiner gesetzt als die Überschrift.
 - Zeiträume im gleichen Jahr erscheinen im Format `TT.MM.–TT.MM.JJJJ`, zum Beispiel `01.07.–12.07.2026`.
 - Zeiträume über einen Jahreswechsel zeigen beide Jahreszahlen, zum Beispiel `28.12.2026–08.01.2027`.
 - Neben der Spanne wird keine Wochenzahl angezeigt.

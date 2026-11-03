@@ -39,6 +39,38 @@ describe('calendar utilities', () => {
     expect(sections[1].weeks.every((week) => week.days.length === 7)).toBe(true);
   });
 
+  it('formats the full holiday-type span across gaps and within one year', () => {
+    const holidays = [
+      { ...winterHoliday, startDate: '2026-07-10', endDate: '2026-07-12' },
+      { ...winterHoliday, startDate: '2026-07-01', endDate: '2026-07-03' },
+    ];
+
+    expect(buildHolidaySections(2026, holidays)[0].dateRange).toBe('01.07.–12.07.2026');
+  });
+
+  it('calculates independent date spans for each holiday type', () => {
+    const holidays = [
+      { ...winterHoliday, startDate: '2026-01-05', endDate: '2026-01-09' },
+      { ...winterHoliday, type: 'sommerferien', label: 'Sommerferien', startDate: '2026-07-20', endDate: '2026-08-07' },
+    ];
+    const sections = buildHolidaySections(2026, holidays);
+
+    expect(sections.map((section) => section.type)).toEqual(['winterferien', 'sommerferien']);
+    expect(sections.map((section) => section.dateRange)).toEqual([
+      '05.01.–09.01.2026',
+      '20.07.–07.08.2026',
+    ]);
+  });
+
+  it('formats both years when the holiday-type span crosses a year boundary', () => {
+    const holidays = [
+      { ...winterHoliday, startDate: '2026-12-28', endDate: '2026-12-30' },
+      { ...winterHoliday, startDate: '2027-01-05', endDate: '2027-01-08' },
+    ];
+
+    expect(buildHolidaySections(2026, holidays)[0].dateRange).toBe('28.12.2026–08.01.2027');
+  });
+
   it('includes the full weeks before and after a holiday contained in one week', () => {
     const holiday = { ...winterHoliday, startDate: '2026-03-03', endDate: '2026-03-06' };
     const section = buildHolidaySections(2026, [holiday])[0];

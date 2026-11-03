@@ -37,6 +37,8 @@ Zu jedem Ferienzeitraum zeigt der Kalender zusätzlich die vollständige Woche v
 
 Für jede Ferienart wird ein eigener Kalenderbereich dargestellt. Eine konsistente Farbdifferenzierung kennzeichnet die Ferienarten. Die Farbpalette umfasst:
 
+In derselben Zeile wie die Überschrift jeder Ferienart steht rechts die Gesamtspanne ihrer Ferienobjekte, während die Bezeichnung links steht. Farbpunkt, Bezeichnung und Spanne sind vertikal ausgerichtet; die Spanne ist kleiner gesetzt als die Überschrift. Sie reicht vom frühesten Start- bis zum spätesten Enddatum, einschließlich möglicher Lücken. Innerhalb desselben Jahres wird die Jahreszahl nur am Ende angezeigt (`01.07.–12.07.2026`); bei einem Jahreswechsel stehen beide Jahreszahlen in der Spanne (`28.12.2026–08.01.2027`). Eine Wochenanzahl wird im Abschnittskopf nicht zusätzlich angezeigt.
+
 - Primary: `oklch(68.5% 0.169 237.323)`
 - Secondary: `oklch(55.4% 0.046 257.417)`
 - Accent: `oklch(69.6% 0.17 162.48)`

@@ -51,10 +51,10 @@ import { HOLIDAY_API_URL, STATES, SUPPORTED_YEARS } from './holidays/holiday.mod
           <div class="calendar-sections" aria-label="Ferienkalender nach Ferienart">
             @for (section of visibleSections(); track section.type; let index = $index) {
               <section class="holiday-section" [attr.data-holiday-type]="section.type" [style.--holiday-color]="holidayColor(index)">
-                <header class="section-heading">
-                  <span class="section-marker" aria-hidden="true"></span>
-                  <h2>{{ section.label }}</h2>
-                  <span class="section-count">{{ section.weeks.length }} Wochen</span>
+                <header class="section-heading grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 mb-3">
+                  <span class="size-[.65rem] rounded-full bg-[var(--holiday-color)]" aria-hidden="true"></span>
+                  <h2 class="m-0 min-w-0 text-base font-bold">{{ section.label }}</h2>
+                  <p class="section-date-range m-0 justify-self-end whitespace-nowrap text-right text-[.72rem] tabular-nums text-[#61747a]">{{ section.dateRange }}</p>
                 </header>
                 <div class="week-grid" role="grid" [attr.aria-label]="section.label + ' Kalenderwochen'">
                   <div class="week-heading" role="row">
