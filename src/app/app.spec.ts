@@ -133,6 +133,7 @@ describe('App', () => {
     await fixture.whenStable();
     const compiled = fixture.nativeElement as HTMLElement;
     fixture.detectChanges();
+    const initialOsterColor = compiled.querySelector<HTMLElement>('[data-holiday-type="osterferien"]')?.dataset['accentColor'];
 
     compiled.querySelector<HTMLButtonElement>('[aria-label="Ferienarten filtern"]')?.click();
     fixture.detectChanges();
@@ -143,6 +144,7 @@ describe('App', () => {
 
     expect(compiled.querySelectorAll('[data-holiday-type]')).toHaveLength(1);
     expect(compiled.querySelector('[data-holiday-type="osterferien"]')).toBeTruthy();
+    expect(compiled.querySelector<HTMLElement>('[data-holiday-type="osterferien"]')?.dataset['accentColor']).toBe(initialOsterColor);
     compiled.querySelector<HTMLButtonElement>('[data-action="invert-types"]')?.click();
     fixture.detectChanges();
     expect(compiled.querySelectorAll('[data-holiday-type]')).toHaveLength(1);
@@ -166,6 +168,43 @@ describe('App', () => {
     expect(winterSection.querySelector('[aria-label^="2026-02-16"]')?.classList.contains('holiday-day')).toBe(true);
     expect(winterSection.querySelector('[aria-label^="2026-02-20"]')?.classList.contains('holiday-day')).toBe(true);
     expect(winterSection.querySelector('[aria-label^="2026-02-21"]')?.classList.contains('holiday-day')).toBe(false);
+  });
+
+  it('renders each holiday section through the requested components and preserves overlapping holidays', async () => {
+    dataService.load.mockReturnValueOnce(of([
+      { type: 'winterferien', label: 'Winterferien', startDate: '2026-02-16', endDate: '2026-02-20', year: 2026, stateCode: 'BY', slug: 'winterferien-1', id: 'winterferien-1' },
+      { type: 'faschingsferien', label: 'Faschingsferien', startDate: '2026-02-18', endDate: '2026-02-20', year: 2026, stateCode: 'BY', slug: 'faschingsferien-1', id: 'faschingsferien-1' },
+    ] as Holiday[]));
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const sections = Array.from(compiled.querySelectorAll<HTMLElement>('[data-holiday-type]'));
+
+    expect(sections).toHaveLength(2);
+    for (const section of sections) {
+      expect(section.querySelector('app-holiday-title h2')?.textContent?.trim()).toBeTruthy();
+      expect(section.querySelector('app-holiday-border')).toBeTruthy();
+      expect(section.querySelector('[role="grid"] [role="columnheader"]')?.textContent).toBe('KW');
+      expect(section.querySelectorAll('app-holiday-week [role="gridcell"]')).not.toHaveLength(0);
+      expect(Array.from(section.querySelectorAll('app-holiday-week')).every((week) => week.querySelectorAll('[role="row"]').length === 1)).toBe(true);
+      const overlapDay = section.querySelector<HTMLElement>('[aria-label^="2026-02-19"]')!;
+      expect(overlapDay.classList.contains('holiday-day')).toBe(true);
+      expect(overlapDay.classList.contains(section.dataset['lightAccentColor']!)).toBe(true);
+      expect(section.querySelector('app-holiday-border div')?.classList.contains(`border-${section.dataset['accentColor']}-700`)).toBe(true);
+      expect(overlapDay.getAttribute('aria-label'))
+        .toContain('Winterferien, Faschingsferien');
+    }
+  });
+
+  it('keeps the toolbar fixed above content and gives it a glow utility', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const toolbar = (fixture.nativeElement as HTMLElement).querySelector('app-toolbar nav')!;
+
+    expect(toolbar.classList.contains('fixed')).toBe(true);
+    expect(toolbar.className).toContain('shadow-');
   });
 
   it('renders the holiday span on the right of its heading without a week count', async () => {
@@ -198,15 +237,49 @@ describe('App', () => {
   });
 
   it('uses distinct colors for all displayed holiday types', async () => {
+    const palettes = [
+      { type: 'winterferien', accent: 'teal', marker: 'bg-teal-700', border: 'border-teal-700', light: 'bg-teal-100' },
+      { type: 'osterferien', accent: 'blue', marker: 'bg-blue-700', border: 'border-blue-700', light: 'bg-blue-100' },
+      { type: 'pfingstferien', accent: 'amber', marker: 'bg-amber-700', border: 'border-amber-700', light: 'bg-amber-100' },
+      { type: 'sommerferien', accent: 'violet', marker: 'bg-violet-700', border: 'border-violet-700', light: 'bg-violet-100' },
+      { type: 'herbstferien', accent: 'lime', marker: 'bg-lime-700', border: 'border-lime-700', light: 'bg-lime-100' },
+      { type: 'weihnachtsferien', accent: 'rose', marker: 'bg-rose-700', border: 'border-rose-700', light: 'bg-rose-100' },
+      { type: 'faschingsferien', accent: 'orange', marker: 'bg-orange-700', border: 'border-orange-700', light: 'bg-orange-100' },
+    ];
+    dataService.load.mockReturnValueOnce(of(palettes.map(({ type }, index) => {
+      const day = String(index + 1).padStart(2, '0');
+      return {
+        type,
+        label: type,
+        startDate: `2026-06-${day}`,
+        endDate: `2026-06-${day}`,
+        year: 2026,
+        stateCode: 'BY',
+        slug: `${type}-2026-BY`,
+        id: `${type}-2026-BY`,
+      };
+    }) as Holiday[]));
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     const sections = Array.from(compiled.querySelectorAll<HTMLElement>('[data-holiday-type]'));
-    const colors = sections.map((section) => getComputedStyle(section).getPropertyValue('--holiday-color').trim());
 
-    expect(sections.length).toBeGreaterThan(1);
-    expect(new Set(colors).size).toBe(sections.length);
+    expect(sections).toHaveLength(7);
+    expect(sections.map((section) => section.dataset['holidayType'])).toEqual(palettes.map(({ type }) => type));
+    for (const [index, section] of sections.entries()) {
+      const palette = palettes[index];
+      const holidayDay = section.querySelector<HTMLElement>('.holiday-day')!;
+      const weekdayHeaders = Array.from(section.querySelectorAll('[role="grid"] [role="columnheader"]'))
+        .slice(1)
+        .map((header) => header.textContent?.trim());
+
+      expect(section.dataset['accentColor']).toBe(palette.accent);
+      expect(section.querySelector('app-holiday-title span')?.classList.contains(palette.marker)).toBe(true);
+      expect(section.querySelector('app-holiday-border div')?.classList.contains(palette.border)).toBe(true);
+      expect(holidayDay.classList.contains(palette.light)).toBe(true);
+      expect(weekdayHeaders).toEqual(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So']);
+    }
   });
 
   it('renders exactly one filter checkbox for every displayed holiday type', async () => {
