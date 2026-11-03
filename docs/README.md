@@ -10,7 +10,7 @@ Die dauerhafte Projektdokumentation liegt in diesem Verzeichnis. Die Root-README
 
 ## Issue-Agenten
 
-Für die Issue-Arbeit liegen vier Workspace-Agenten unter `.github/agents/`: `Analyse` klärt Anforderungen, erstellt bestätigte Issues mit Abnahmekriterien und ordnet sie nach Nutzerabnahme zur Übergabe an `Developer`; `Developer` implementiert und reviewed, `Tester` prüft Testabdeckung und Edge-Cases, `Business` erteilt die fachliche Freigabe. Die Übergaben und Rückgaben sind in den Agent-Dateien beschrieben. Alle Rollen müssen weiterhin den verbindlichen Ablauf in `.github/skills/issue/SKILL.md` einhalten.
+Für die Issue-Arbeit liegen vier Workspace-Agenten unter `.github/agents/`: `Analyse` klärt Anforderungen, erstellt nach Bestätigung ein Konzept- oder Umsetzungsdokument unter `docs/` sowie eine Issue mit Abnahmekriterien und ordnet bestätigte Issues zur Übergabe an `Developer`; `Developer` implementiert und reviewed, `Tester` prüft Testabdeckung und Edge-Cases, `Business` erteilt die fachliche Freigabe. Die Übergaben und Rückgaben sind in den Agent-Dateien beschrieben. Alle Rollen müssen weiterhin den verbindlichen Ablauf in `.github/skills/issue/SKILL.md` einhalten.
 
 ## Pflege
 

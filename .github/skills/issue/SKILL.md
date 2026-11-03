@@ -8,7 +8,7 @@ argument-hint: '<issue-nummer>'
 
 ## Anforderungen ohne bestehende Issue
 
-Diese Skill setzt eine bereits angelegte Issue voraus. Wenn der Nutzer zunächst nur eine informelle Anforderung und keine Issue-Nummer hat, verwende den Agenten `Analyse`, um Unklarheiten zu klären und einen Issue-Entwurf mit Abnahmekriterien zu erstellen. Veröffentliche den Entwurf erst nach ausdrücklicher Bestätigung des Nutzers.
+Diese Skill setzt eine bereits angelegte Issue voraus. Wenn der Nutzer zunächst nur eine informelle Anforderung und keine Issue-Nummer hat, verwende den Agenten `Analyse`, um Unklarheiten zu klären, einen Issue-Entwurf mit Abnahmekriterien und ein passendes Konzept- oder Umsetzungsdokument als Markdown unter `docs/` zu erstellen. Analyse muss beide Entwürfe samt Dateipfad bestätigen lassen und das Dokument nach den Repository-Regeln veröffentlichen, bevor oder während die bestätigte Issue angelegt wird.
 
 Wenn mehrere Issues erstellt und vom Nutzer abgenommen wurden, kann `Analyse` sie nach bestätigten Prioritäten und Abhängigkeiten ordnen und die Reihenfolge nach Bestätigung an `Developer` übergeben. Diese Übergabe ist keine Freigabe zur Umsetzung. `Developer` muss jede Issue mit `/issue <issue-nummer>` nach dem folgenden Freigabe- und Branch-Ablauf einzeln beginnen; Issues dürfen nicht allein aufgrund ihrer Aufnahme in die Reihenfolge umgesetzt werden.
 
