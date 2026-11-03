@@ -13,6 +13,7 @@
         "gh pr list": true,
         "gh pr view": true,
         "gh pr create": true,
+        "gh pr edit": true,
         "gh issue list": true,
         "gh issue view": true,
         "gh issue create": true,
