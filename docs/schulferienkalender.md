@@ -4,7 +4,13 @@
 
 Die Anwendung soll Schulferien je Jahr und Bundesland in einem Kalender darstellen. Nutzerinnen und Nutzer sollen Ferienarten gezielt filtern können. Die Datenquelle ist https://schulferien-api.de/.
 
-Das Repository verwendet Angular 22, NgRx Signal Store, Tailwind CSS und Angular Service Worker. Spartan UI ist derzeit nicht als Abhängigkeit installiert. Seine Kompatibilität mit der vorhandenen Angular-Version ist vor einem Einsatz zu prüfen.
+Das Repository verwendet Angular 22, NgRx Signal Store, Tailwind CSS und Angular Service Worker. Die Spartan-UI-Versionsmatrix weist Angular 22 als unterstützt aus; auch `@spartan-ng/brain` 1.9.0 erlaubt Angular-Versionen ab 21 und kleiner als 23. Spartan UI wurde nicht integriert, da native HTML-Controls die benötigten Auswahl-, Dialog- und Filterinteraktionen abdecken und keine zusätzliche UI-Abhängigkeit erforderlich ist.
+
+## DataProvider V2
+
+Die Anwendung verwendet die erweiterte API V2. Für Jahr und Bundesland lautet der Abruf `GET https://schulferien-api.de/api/v2/{jahr}?states={code}`, zum Beispiel `GET https://schulferien-api.de/api/v2/2026?states=BY`. Die API liefert eine Liste von Ferienobjekten mit `start`, `end`, `year`, `stateCode`, `name`, `name_cp`, `slug` und `id`. Die Anwendung normalisiert `start` und `end` zu Datumswerten ohne Uhrzeit und bildet `name` auf den Ferienart-Schlüssel sowie `name_cp` auf die angezeigte Bezeichnung ab.
+
+Die API-Dokumentation weist die Jahre 2022 bis 2029 und alle 16 Bundesländer aus. Die Auswahl beschränkt sich auf diese Werte. Der ursprüngliche API-Payload wird je Jahr und Bundesland unter einem versionsgebundenen Schlüssel in `localStorage` gespeichert und beim Auslesen normalisiert. Ungültige Antworten werden nicht gecacht; bei einem ungültigen Refresh bleibt ein vorheriger erfolgreicher Cache erhalten. Offline wird ausschließlich dieser lokale Bestand gelesen; ohne Cache bleibt die Auswahl leer. Schlägt ein Online-Abruf fehl, werden gespeicherte Daten als Rückfall angezeigt. Die Reload-Aktion nutzt denselben Online-Check und löst offline keinen API-Aufruf aus.
 
 ## Ziele
 
@@ -39,7 +45,7 @@ Das Filter-Popup enthält je Ferienart eine Checkbox sowie die Aktionen „Alles
 
 ### Daten und Offline-Verhalten
 
-Online werden Daten von https://schulferien-api.de/ geladen. Lokal bereits verfügbare Daten sollen auch offline nutzbar sein. Im Offline-Modus werden keine Abrufe an die API versucht.
+Online werden Daten von https://schulferien-api.de/ über die V2-API geladen. Lokal bereits verfügbare Daten werden auch offline genutzt. Im Offline-Modus werden keine Abrufe an die API versucht.
 
 Ein Reload-Steuerelement bietet eine Aktualisierung der Daten. Online kann es einen erneuten Abruf anstoßen; offline darf es keinen API-Abruf auslösen.
 
@@ -56,7 +62,7 @@ Eine abgerundete Toolbar liegt oberhalb des Hauptinhalts und enthält Reload sow
 
 Die Anwendung verwendet Angular 22, NgRx Signal Store und Tailwind CSS. Als Farbwerte gelten die oben genannten Primary-, Secondary- und Accent-Farben. Safe-Area-Insets müssen bei der Gestaltung der Bildschirmränder berücksichtigt werden.
 
-Der Einsatz von Spartan UI setzt eine vorherige Prüfung der Kompatibilität mit der vorhandenen Angular-Version voraus. Eine nicht bestätigte Kompatibilität gilt nicht als geklärt; eine alternative Entscheidung ist vor der Umsetzung einzuholen.
+Die Kompatibilität von Spartan UI mit Angular 22 wurde anhand der [offiziellen Versionsmatrix](https://www.spartan.ng/documentation/version-support) und der Peer-Dependencies von `@spartan-ng/brain` 1.9.0 geprüft. Die Anwendung verwendet dennoch native HTML-Controls; die kompatible Bibliothek ist keine Laufzeitabhängigkeit.
 
 ## Nicht-Ziele
 
@@ -71,16 +77,10 @@ Der Einsatz von Spartan UI setzt eine vorherige Prüfung der Kompatibilität mit
 - Die Git-Repository-URL und die Quelle für die angezeigte Anwendungsversion werden im Projekt geprüft, bevor sie in der About-Ansicht festgelegt werden.
 - Die vorgegebenen Farbwerte sind verbindlich; die konkrete Zuordnung zu Ferienarten muss eine klare visuelle Unterscheidung ermöglichen.
 
-## Offene Fragen und technische Risiken
+## Verbleibende Prüfgrenzen
 
-- Welche Jahreswerte und Bundesländer stellt die Datenquelle tatsächlich bereit?
-- Wie werden Daten lokal verfügbar gehalten, und welches Verhalten ist beim ersten Offline-Aufruf ohne zuvor verfügbare Daten vorgesehen?
-- Welche Ferienarten liefert die Datenquelle, und reichen die festgelegten Farbrollen für ihre eindeutige Unterscheidung aus?
-- Ist Spartan UI mit der im Projekt verwendeten Angular-Version kompatibel?
-- Welche Browser-spezifischen Hinweise sind für die PWA-Installationsanleitung erforderlich?
-- Woher sollen Versionsnummer und Git-Repository-URL zur Laufzeit beziehungsweise beim Build bezogen werden?
-
-Diese Punkte sind vor oder während der Umsetzung zu prüfen. Sie gelten nicht als bereits verifizierte technische Entscheidungen.
+- Die Safe-Area-Regeln wurden im CSS geprüft, aber nicht mit nicht-null Safe-Area-Inset-Werten auf physischer Notch-Hardware verifiziert.
+- AXE wurde nicht ausgeführt; die automatisierten Tastatur- und Fokusprüfungen ersetzen keinen vollständigen Accessibility-Audit.
 
 ## Umsetzung und Verifikation
 
@@ -91,6 +91,10 @@ Diese Punkte sind vor oder während der Umsetzung zu prüfen. Sie gelten nicht a
 5. Farben, Safe-Area-Abstände und PWA-Installationshinweise überprüfen.
 6. Relevante automatisierte Tests ausführen und `npm run build` sowie `npm test -- --watch=false` prüfen.
 7. Offline-Verhalten und Safe-Area-Darstellung zusätzlich manuell oder mit geeigneter Browserprüfung verifizieren.
+
+Die automatisierten Regressionstests decken den API-freien Offline-Reload, normalisierte Metadaten, den Cache bei ungültigen Einzel-Datensätzen, vollständige gerenderte 7-Tage-Wochen, Feiertagsmarkierungen, Ferienart-Checkboxen, den Online-Reload mit aktualisiertem Kalender und Store-Zustand sowie Fokus, Tab-Umlauf und Escape für die Dialoge ab.
+
+Eine Playwright-Prüfung im emulierten Viewport 390 × 844 wurde ausgeführt: Dokument- und Viewportbreite betrugen beide 390 Pixel, es gab keinen horizontalen Überlauf, der Header lag bei 0–77 Pixeln und die Toolbar am unteren Viewportrand bei 844 Pixeln. Kalenderdarstellung und Dialoge wurden geprüft; der Filter enthielt sechs Checkboxen, und der About-Dialog zeigte die erwarteten Angaben und gab den Fokus nach Escape an seinen Auslöser zurück. Dies ist keine Prüfung auf physischer Hardware: Safe-Area-Inset- beziehungsweise Notch-Verhalten wurde nicht auf einem Gerät verifiziert. AXE wurde nicht ausgeführt.
 
 ## Abnahmekriterien
 
