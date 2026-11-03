@@ -10,6 +10,8 @@
         "git switch": true,
         "git checkout": true,
         "git diff": true,
+        "git branch": true,
+        "git rev-parse": true,
         "gh pr list": true,
         "gh pr view": true,
         "gh pr create": true,
