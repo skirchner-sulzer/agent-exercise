@@ -33,6 +33,8 @@ Jahr und Bundesland werden im Header angezeigt. Ein Dialog ermöglicht die Auswa
 
 Der Kalender zeigt vollständige Montag-bis-Sonntag-Wochen. Tage außerhalb des ausgewählten Jahres bleiben sichtbar, wenn sie zu einer dargestellten Woche gehören. Schulferien werden visuell hervorgehoben.
 
+Zu jedem Ferienzeitraum zeigt der Kalender zusätzlich die vollständige Woche vor seiner Startwoche und nach seiner Endwoche. Diese Regel gilt auch über Jahresgrenzen hinweg; benötigte Wochen außerhalb des ausgewählten Jahres bleiben vollständig sichtbar. Überschneidende Zusatzwochen werden innerhalb eines Ferienart-Kalenders nur einmal dargestellt. Ferienarten bleiben voneinander unabhängig.
+
 Für jede Ferienart wird ein eigener Kalenderbereich dargestellt. Eine konsistente Farbdifferenzierung kennzeichnet die Ferienarten. Die Farbpalette umfasst:
 
 - Primary: `oklch(68.5% 0.169 237.323)`
@@ -100,6 +102,7 @@ Eine Playwright-Prüfung im emulierten Viewport 390 × 844 wurde ausgeführt: Do
 
 - Beim Start sind aktuelles Jahr und Bayern ausgewählt; Auswahländerungen aktualisieren den Kalender.
 - Der Kalender zeigt vollständige Montag-bis-Sonntag-Wochen einschließlich angrenzender Tage außerhalb des Jahres.
+- Zu jedem Ferienzeitraum erscheinen die vollständige Woche vor der Startwoche und nach der Endwoche; gemeinsame Zusatzwochen werden je Ferienart-Kalender dedupliziert.
 - Schulferien sind hervorgehoben und je Ferienart separat sowie farblich unterscheidbar dargestellt.
 - Checkboxen, „Alles auswählen“ und „Auswahl umkehren“ steuern die sichtbaren Ferienarten wie beschrieben.
 - Online können Daten geladen und über Reload aktualisiert werden.

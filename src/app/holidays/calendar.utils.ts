@@ -38,6 +38,22 @@ function isoWeekNumber(monday: Date): number {
   return Math.round((monday.getTime() - firstMonday.getTime()) / 604_800_000) + 1;
 }
 
+function buildCalendarWeek(year: number, weekStart: Date, holidays: Holiday[]): CalendarWeek {
+  const days = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(weekStart);
+    date.setUTCDate(date.getUTCDate() + index);
+    const dateString = formatDate(date);
+    return {
+      date: dateString,
+      dayOfMonth: date.getUTCDate(),
+      inSelectedYear: date.getUTCFullYear() === year,
+      holidays: holidays.filter((holiday) => holiday.startDate <= dateString && holiday.endDate >= dateString),
+    };
+  });
+
+  return { startDate: formatDate(weekStart), weekNumber: isoWeekNumber(weekStart), days };
+}
+
 export function buildCalendarWeeks(year: number, holidays: Holiday[]): CalendarWeek[] {
   const firstDay = new Date(Date.UTC(year, 0, 1));
   const lastDay = new Date(Date.UTC(year, 11, 31));
@@ -58,19 +74,7 @@ export function buildCalendarWeeks(year: number, holidays: Holiday[]): CalendarW
 
   const weeks: CalendarWeek[] = [];
   for (const weekStart = new Date(firstMonday); weekStart <= finalSunday; weekStart.setUTCDate(weekStart.getUTCDate() + 7)) {
-    const days = Array.from({ length: 7 }, (_, index) => {
-      const date = new Date(weekStart);
-      date.setUTCDate(date.getUTCDate() + index);
-      const dateString = formatDate(date);
-      return {
-        date: dateString,
-        dayOfMonth: date.getUTCDate(),
-        inSelectedYear: date.getUTCFullYear() === year,
-        holidays: holidays.filter((holiday) => holiday.startDate <= dateString && holiday.endDate >= dateString),
-      };
-    });
-
-    weeks.push({ startDate: formatDate(weekStart), weekNumber: isoWeekNumber(weekStart), days });
+    weeks.push(buildCalendarWeek(year, weekStart, holidays));
   }
 
   return weeks;
@@ -85,7 +89,29 @@ export function buildHolidaySections(year: number, holidays: Holiday[]): Holiday
   }
 
   return Array.from(byType, ([type, items]) => {
-    const weeks = buildCalendarWeeks(year, items).filter((week) => week.days.some((day) => day.holidays.length > 0));
+    const weeksByStart = new Map(buildCalendarWeeks(year, items).map((week) => [week.startDate, week]));
+    const additionalWeekStarts = new Set<string>();
+
+    for (const holiday of items) {
+      const startWeek = mondayFor(new Date(`${holiday.startDate}T00:00:00Z`));
+      startWeek.setUTCDate(startWeek.getUTCDate() - 7);
+      additionalWeekStarts.add(formatDate(startWeek));
+
+      const endWeek = mondayFor(new Date(`${holiday.endDate}T00:00:00Z`));
+      endWeek.setUTCDate(endWeek.getUTCDate() + 7);
+      additionalWeekStarts.add(formatDate(endWeek));
+    }
+
+    for (const weekStart of additionalWeekStarts) {
+      if (!weeksByStart.has(weekStart)) {
+        weeksByStart.set(weekStart, buildCalendarWeek(year, new Date(`${weekStart}T00:00:00Z`), items));
+      }
+    }
+
+    const weeks = Array.from(weeksByStart.values())
+      .filter((week) => additionalWeekStarts.has(week.startDate) || week.days.some((day) => day.holidays.length > 0))
+      .sort((left, right) => left.startDate.localeCompare(right.startDate));
+
     return { type, label: items[0].label, weeks };
   }).filter((section) => section.weeks.length > 0);
 }
