@@ -20,6 +20,22 @@ export interface HolidaySection {
   weeks: CalendarWeek[];
 }
 
+export interface CalendarDayView {
+  date: string;
+  dayOfMonth: number;
+  inSelectedYear: boolean;
+  isHoliday: boolean;
+  accessibleLabel: string;
+}
+
+export interface CalendarWeekView extends Omit<CalendarWeek, 'days'> {
+  days: CalendarDayView[];
+}
+
+export interface HolidaySectionView extends Omit<HolidaySection, 'weeks'> {
+  weeks: CalendarWeekView[];
+}
+
 function formatDate(date: Date): string {
   return date.toISOString().slice(0, 10);
 }
@@ -68,7 +84,7 @@ function buildCalendarWeek(year: number, weekStart: Date, holidays: Holiday[]): 
   return { startDate: formatDate(weekStart), weekNumber: isoWeekNumber(weekStart), days };
 }
 
-export function buildCalendarWeeks(year: number, holidays: Holiday[]): CalendarWeek[] {
+export function buildCalendarWeeks(year: number, holidays: Holiday[], dayHolidays = holidays): CalendarWeek[] {
   const firstDay = new Date(Date.UTC(year, 0, 1));
   const lastDay = new Date(Date.UTC(year, 11, 31));
   for (const holiday of holidays) {
@@ -88,7 +104,7 @@ export function buildCalendarWeeks(year: number, holidays: Holiday[]): CalendarW
 
   const weeks: CalendarWeek[] = [];
   for (const weekStart = new Date(firstMonday); weekStart <= finalSunday; weekStart.setUTCDate(weekStart.getUTCDate() + 7)) {
-    weeks.push(buildCalendarWeek(year, weekStart, holidays));
+    weeks.push(buildCalendarWeek(year, weekStart, dayHolidays));
   }
 
   return weeks;
@@ -103,7 +119,7 @@ export function buildHolidaySections(year: number, holidays: Holiday[]): Holiday
   }
 
   return Array.from(byType, ([type, items]) => {
-    const weeksByStart = new Map(buildCalendarWeeks(year, items).map((week) => [week.startDate, week]));
+    const weeksByStart = new Map(buildCalendarWeeks(year, items, holidays).map((week) => [week.startDate, week]));
     const additionalWeekStarts = new Set<string>();
 
     for (const holiday of items) {
@@ -118,12 +134,12 @@ export function buildHolidaySections(year: number, holidays: Holiday[]): Holiday
 
     for (const weekStart of additionalWeekStarts) {
       if (!weeksByStart.has(weekStart)) {
-        weeksByStart.set(weekStart, buildCalendarWeek(year, new Date(`${weekStart}T00:00:00Z`), items));
+        weeksByStart.set(weekStart, buildCalendarWeek(year, new Date(`${weekStart}T00:00:00Z`), holidays));
       }
     }
 
     const weeks = Array.from(weeksByStart.values())
-      .filter((week) => additionalWeekStarts.has(week.startDate) || week.days.some((day) => day.holidays.length > 0))
+      .filter((week) => additionalWeekStarts.has(week.startDate) || week.days.some((day) => day.holidays.some((holiday) => holiday.type === type)))
       .sort((left, right) => left.startDate.localeCompare(right.startDate));
 
     return { type, label: items[0].label, dateRange: formatHolidayDateRange(items), weeks };
