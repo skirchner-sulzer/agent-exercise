@@ -6,6 +6,10 @@ argument-hint: '<issue-nummer>'
 
 # GitHub-Issue umsetzen
 
+## Anforderungen ohne bestehende Issue
+
+Diese Skill setzt eine bereits angelegte Issue voraus. Wenn der Nutzer zunächst nur eine informelle Anforderung und keine Issue-Nummer hat, verwende den Agenten `Analyse`, um Unklarheiten zu klären und einen Issue-Entwurf mit Abnahmekriterien zu erstellen. Veröffentliche den Entwurf erst nach ausdrücklicher Bestätigung des Nutzers. Nach erfolgreicher Erstellung muss die Umsetzung separat mit `/issue <issue-nummer>` gestartet werden; alle folgenden Freigabe- und Branch-Regeln gelten unverändert.
+
 ## Eingabe und Issue lesen
 
 1. Verlange eine Issue-Nummer als Parameter, zum Beispiel `/issue 123`. Fehlt sie oder ist sie ungültig, frage nach der Nummer und beginne keine Arbeit.
