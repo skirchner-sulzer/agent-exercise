@@ -7,11 +7,15 @@
         "git push": true,
         "git add": true,
         "git commit": true,
+        "git switch": true,
+        "git checkout": true,
+        "git diff": true,
         "gh pr list": true,
         "gh pr view": true,
         "gh pr create": true,
         "gh issue list": true,
         "gh issue view": true,
-        "gh issue create": true
+        "gh issue create": true,
+        "gh auth status": true
     }
 }
