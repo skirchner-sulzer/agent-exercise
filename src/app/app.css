@@ -9,7 +9,6 @@
 
 .brand-mark,
 .selection-button,
-.section-heading,
 .type-option,
 .bottom-toolbar button {
 	display: flex;
@@ -118,11 +117,6 @@
 	animation: section-enter 220ms ease-out both;
 }
 
-.section-heading {
-	gap: .65rem;
-	margin-bottom: .7rem;
-}
-
 .section-marker,
 .holiday-dot {
 	flex: none;
@@ -130,18 +124,6 @@
 	aspect-ratio: 1;
 	border-radius: 50%;
 	background: var(--holiday-color);
-}
-
-.section-heading h2 {
-	margin: 0;
-	font-size: 1rem;
-	font-weight: 700;
-}
-
-.section-count {
-	margin-left: auto;
-	color: #61747a;
-	font-size: .72rem;
 }
 
 .week-grid {

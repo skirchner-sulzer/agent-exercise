@@ -168,6 +168,35 @@ describe('App', () => {
     expect(winterSection.querySelector('[aria-label^="2026-02-21"]')?.classList.contains('holiday-day')).toBe(false);
   });
 
+  it('renders the holiday span on the right of its heading without a week count', async () => {
+    dataService.load.mockReturnValueOnce(of([
+      { type: 'sommerferien', label: 'Sommerferien', startDate: '2026-07-01', endDate: '2026-07-03', year: 2026, stateCode: 'BY', slug: 'sommerferien-1', id: 'sommerferien-1' },
+      { type: 'sommerferien', label: 'Sommerferien', startDate: '2026-07-10', endDate: '2026-07-12', year: 2026, stateCode: 'BY', slug: 'sommerferien-2', id: 'sommerferien-2' },
+    ] as Holiday[]));
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const section = compiled.querySelector('[data-holiday-type="sommerferien"]')!;
+    const header = section.querySelector<HTMLElement>('.section-heading')!;
+    const dateRange = header.querySelector<HTMLElement>('.section-date-range')!;
+    const heading = header.querySelector<HTMLElement>('h2')!;
+
+    expect(Array.from(header.children).map((element) => element.tagName)).toEqual(['SPAN', 'H2', 'P']);
+    expect(header.children[0].classList.contains('rounded-full')).toBe(true);
+    expect(heading.textContent).toBe('Sommerferien');
+    expect(dateRange.textContent?.trim()).toBe('01.07.–12.07.2026');
+    expect(header.classList.contains('section-heading')).toBe(true);
+    expect(header.classList.contains('grid')).toBe(true);
+    expect(header.classList.contains('grid-cols-[auto_minmax(0,1fr)_auto]')).toBe(true);
+    expect(header.classList.contains('items-center')).toBe(true);
+    expect(dateRange.classList.contains('section-date-range')).toBe(true);
+    expect(dateRange.classList.contains('justify-self-end')).toBe(true);
+    expect(dateRange.classList.contains('text-[.72rem]')).toBe(true);
+    expect(section.querySelector('.section-count')).toBeNull();
+    expect(section.textContent).not.toContain('Wochen');
+  });
+
   it('uses distinct colors for all displayed holiday types', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();

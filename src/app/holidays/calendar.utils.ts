@@ -16,11 +16,25 @@ export interface CalendarWeek {
 export interface HolidaySection {
   type: string;
   label: string;
+  dateRange: string;
   weeks: CalendarWeek[];
 }
 
 function formatDate(date: Date): string {
   return date.toISOString().slice(0, 10);
+}
+
+function formatHolidayDateRange(holidays: Holiday[]): string {
+  const startDate = holidays.reduce((earliest, holiday) => holiday.startDate < earliest ? holiday.startDate : earliest, holidays[0].startDate);
+  const endDate = holidays.reduce((latest, holiday) => holiday.endDate > latest ? holiday.endDate : latest, holidays[0].endDate);
+  const start = `${startDate.slice(8, 10)}.${startDate.slice(5, 7)}`;
+  const end = `${endDate.slice(8, 10)}.${endDate.slice(5, 7)}`;
+  const startYear = startDate.slice(0, 4);
+  const endYear = endDate.slice(0, 4);
+
+  return startYear === endYear
+    ? `${start}.–${end}.${endYear}`
+    : `${start}.${startYear}–${end}.${endYear}`;
 }
 
 function mondayFor(date: Date): Date {
@@ -112,6 +126,6 @@ export function buildHolidaySections(year: number, holidays: Holiday[]): Holiday
       .filter((week) => additionalWeekStarts.has(week.startDate) || week.days.some((day) => day.holidays.length > 0))
       .sort((left, right) => left.startDate.localeCompare(right.startDate));
 
-    return { type, label: items[0].label, weeks };
+    return { type, label: items[0].label, dateRange: formatHolidayDateRange(items), weeks };
   }).filter((section) => section.weeks.length > 0);
 }
