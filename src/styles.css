@@ -1,15 +1,19 @@
 @import 'tailwindcss';
+@import './app/app.css';
 
 :root {
 	color-scheme: light;
-	font-family: ui-sans-serif, system-ui, sans-serif;
+	--primary: oklch(68.5% 0.169 237.323);
+	--secondary: oklch(55.4% 0.046 257.417);
+	--accent: oklch(69.6% 0.17 162.48);
+	font-family: 'Avenir Next', Avenir, 'Trebuchet MS', sans-serif;
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 }
 
 body {
 	min-width: 320px;
-	min-height: 100vh;
+	min-height: 100svh;
 	margin: 0;
 }
 
