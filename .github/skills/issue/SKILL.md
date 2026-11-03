@@ -8,7 +8,9 @@ argument-hint: '<issue-nummer>'
 
 ## Anforderungen ohne bestehende Issue
 
-Diese Skill setzt eine bereits angelegte Issue voraus. Wenn der Nutzer zunächst nur eine informelle Anforderung und keine Issue-Nummer hat, verwende den Agenten `Analyse`, um Unklarheiten zu klären und einen Issue-Entwurf mit Abnahmekriterien zu erstellen. Veröffentliche den Entwurf erst nach ausdrücklicher Bestätigung des Nutzers. Nach erfolgreicher Erstellung muss die Umsetzung separat mit `/issue <issue-nummer>` gestartet werden; alle folgenden Freigabe- und Branch-Regeln gelten unverändert.
+Diese Skill setzt eine bereits angelegte Issue voraus. Wenn der Nutzer zunächst nur eine informelle Anforderung und keine Issue-Nummer hat, verwende den Agenten `Analyse`, um Unklarheiten zu klären und einen Issue-Entwurf mit Abnahmekriterien zu erstellen. Veröffentliche den Entwurf erst nach ausdrücklicher Bestätigung des Nutzers.
+
+Wenn mehrere Issues erstellt und vom Nutzer abgenommen wurden, kann `Analyse` sie nach bestätigten Prioritäten und Abhängigkeiten ordnen und die Reihenfolge nach Bestätigung an `Developer` übergeben. Diese Übergabe ist keine Freigabe zur Umsetzung. `Developer` muss jede Issue mit `/issue <issue-nummer>` nach dem folgenden Freigabe- und Branch-Ablauf einzeln beginnen; Issues dürfen nicht allein aufgrund ihrer Aufnahme in die Reihenfolge umgesetzt werden.
 
 ## Eingabe und Issue lesen
 
