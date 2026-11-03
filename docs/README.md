@@ -1,0 +1,16 @@
+# Projektdokumentation und Memory
+
+Die dauerhafte Projektdokumentation liegt in diesem Verzeichnis. Die Root-README dient als Einstieg für Setup und Standardbefehle; ausführliche Themen werden hier dokumentiert.
+
+## Struktur
+
+- Lege fachliche Dokumentation nach Möglichkeit thematisch oder nach Business-Domäne ab.
+- Lege repositorybezogene Memory-Notizen unter `docs/memory/` ab, jeweils in einer knappen Markdown-Datei pro Thema, zum Beispiel `architecture.md`, `testing.md` oder `tooling.md`.
+- Ergänze diese Übersicht, wenn die Dokumentationsstruktur deutlich wächst.
+
+## Pflege
+
+- Lies vor einer passenden Änderung die relevanten Dokumente und Memory-Notizen.
+- Aktualisiere Dokumentation und Memory nach der Verifikation als letzten Arbeitsschritt. Speichere nur überprüfte, dauerhaft hilfreiche Erkenntnisse, Entscheidungen und Projektkonventionen.
+- Schreibe auf Deutsch und halte Notizen präzise, umsetzbar und thematisch fokussiert. Vermeide Duplikate zu `AGENTS.md` und der Root-README.
+- Speichere keine Zugangsdaten, personenbezogenen Informationen oder flüchtigen Sitzungsverläufe. Benutzerweite Präferenzen gehören nicht in das Repository.
