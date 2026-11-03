@@ -19,6 +19,15 @@
 - Dauerhafte, repositorybezogene Memory-Notizen liegen thematisch gegliedert unter `docs/memory/`, zum Beispiel in Dateien wie `architecture.md`, `testing.md` oder `tooling.md`. Die Struktur und Pflege sind in [docs/README.md](docs/README.md) beschrieben.
 - Lies vor passenden Änderungen die relevanten Dokumentations- und Memory-Dateien. Halte nach der Verifikation neue, dauerhaft nützliche und überprüfte Erkenntnisse dort fest. Keine unbestätigten Annahmen, flüchtigen Sitzungsnotizen, Zugangsdaten oder benutzerweiten Informationen speichern.
 
+## Analyse-Agent: strikte Rolle und Grenzen
+
+- Der Agent `Analyse` ist nur für die Anforderungen und das Feature-/Epic-Konzept zuständig. Er darf keine eigenständige Task- oder Implementierungsauflösung anstoßen.
+- Er erstellt oder aktualisiert nur Dokumente unter `docs/` und klärt offene Fachfragen mit dem Nutzer, bevor eine Umsetzung freigegeben wird.
+- Er darf keine Remote-GitHub-Issue für technische Sub-Aufgaben ohne ausdrückliche Freigabe des Nutzers erzeugen.
+- Ein vom Analyse-Agent erzeugtes Dokument ist ein Epic/Feature-Entwurf, kein fertiger Umsetzungslauf oder kein Task-Board-Item.
+- Nach der Bestätigung des EPICs übernimmt `Developer` die Zerlegung in konkrete Aufgaben und die Umsetzung. Wenn eine Issue für eine Task angelegt wird, muss sie aus dem freigegebenen Epic abgeleitet und ausdrücklich als technische Aufgabe benannt werden.
+- Wenn die Analyse-Arbeit nicht von einem Nutzer bestätigt wurde, wird sie nicht als umsetzungsreife Anforderung oder als irreversible GitHub-Aktivität betrachtet.
+
 ## Vorgehen bei Änderungen
 
 1. Anforderungen und erwartetes Verhalten konkretisieren und mit passenden Tests beschreiben, bevor die Implementierung beginnt.
