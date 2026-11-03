@@ -8,6 +8,10 @@ Die dauerhafte Projektdokumentation liegt in diesem Verzeichnis. Die Root-README
 - Lege repositorybezogene Memory-Notizen unter `docs/memory/` ab, jeweils in einer knappen Markdown-Datei pro Thema, zum Beispiel `architecture.md`, `testing.md` oder `tooling.md`.
 - Ergänze diese Übersicht, wenn die Dokumentationsstruktur deutlich wächst.
 
+## Issue-Agenten
+
+Für die rollenbasierte Issue-Bearbeitung liegen drei Workspace-Agenten unter `.github/agents/`: `Developer` implementiert und reviewed, `Tester` prüft Testabdeckung und Edge-Cases, `Business` erteilt die fachliche Freigabe. Die Übergaben und Rückgaben sind in den Agent-Dateien beschrieben. Alle Rollen müssen weiterhin den verbindlichen Ablauf in `.github/skills/issue/SKILL.md` einhalten.
+
 ## Pflege
 
 - Lies vor einer passenden Änderung die relevanten Dokumente und Memory-Notizen.
